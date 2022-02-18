@@ -52,12 +52,12 @@ export default {
       }
     },
 
-    onUpdateActive (index) {
+    onUpdateActive (index, isChennelEditShow = true) {
       // 更新激活的频道项目
-      console.log('home', index)
+      // console.log('home', index)
       this.active = index
       // 关闭频道编辑弹层
-      this.isChennelEditShow = false
+      this.isChennelEditShow = isChennelEditShow
     }
   },
   created () {

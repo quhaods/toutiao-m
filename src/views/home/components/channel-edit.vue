@@ -62,10 +62,21 @@ export default {
 
     onMyChannelClick (channel, index) {
       if (this.isEdit) {
-        // 编辑状态，执行删除频道
+        // 1、 如果是固定频道，则不删除
+        if (this.fiexChannels.includes(channel.id)) {
+          return
+        }
+        // 2、编辑状态，执行删除频道
+        this.myChannels.splice(index, 1)
+        // 参数1：要删除的元素的开始索引
+        // 参数2：删除的个数，如果不指定，则从参数1开始一直删除
+        // 3、让激活频道的索引-1
+        if (index <= this.active) {
+          this.$emit('update-active', this.active - 1, true)
+        }
       } else {
         // 非编辑状态，执行切换频道
-        this.$emit('update-active', index)
+        this.$emit('update-active', index, false)
       }
     }
   },
