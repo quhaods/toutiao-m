@@ -3,10 +3,10 @@
     <!-- 我的频道 -->
     <van-cell :border="false">
       <div slot="title" class="title-text">我的频道</div>
-      <van-button class="edit-btn" type="danger" plain round size="mini">编辑</van-button>
+      <van-button class="edit-btn" type="danger" plain round size="mini" @click="isEdit = !isEdit">{{ isEdit ? '完成':'编辑' }}</van-button>
     </van-cell>
     <van-grid class="my-grid" :gutter="10" :border="false">
-      <van-grid-item class="grid-item" v-for="(channel, index) in myChannels" :key="index" icon="clear">
+      <van-grid-item class="grid-item" v-for="(channel, index) in myChannels" :key="index" @click="onMyChannelClick(channel,index)">
         <!--
         v-bind:class 语法
         一个对象，对象中的key表示要作用的CSS类名
@@ -14,6 +14,7 @@
         true. 则作用该类名
         false. 不作用类名
        -->
+        <van-icon slot="icon" name="clear" v-show="isEdit && !fiexChannels.includes(channel.id)"></van-icon>
         <span class="text" :class="{ active: index === active}" slot="text">
           {{channel.name}}
         </span>
@@ -26,7 +27,7 @@
       <div slot="title" class="title-text">频道推荐</div>
     </van-cell>
     <van-grid class="recommend-grid" :gutter="10" :border="false">
-      <van-grid-item class="grid-item" v-for="(channel, index) in recommendChannels" :key="index" :text="channel.name" icon="plus" />
+      <van-grid-item class="grid-item" v-for="(channel, index) in recommendChannels" :key="index" :text="channel.name" icon="plus" @click="onAddChannel(channel)" />
     </van-grid>
     <!-- /频道推荐 -->
   </div>
@@ -38,7 +39,9 @@ export default {
   name: 'ChannelEdit',
   data () {
     return {
-      allChannels: []
+      allChannels: [], // 所有频道
+      isEdit: false, // 控制编辑状态的显示
+      fiexChannels: [0] // 固定频道，不允许删除
     }
   },
   components: {},
@@ -50,6 +53,19 @@ export default {
         this.allChannels = data.data.channels
       } catch (err) {
         this.$toast('数据获取失败')
+      }
+    },
+
+    onAddChannel (channel) {
+      this.myChannels.push(channel)
+    },
+
+    onMyChannelClick (channel, index) {
+      if (this.isEdit) {
+        // 编辑状态，执行删除频道
+      } else {
+        // 非编辑状态，执行切换频道
+        this.$emit('update-active', index)
       }
     }
   },
@@ -64,22 +80,35 @@ export default {
     }
   },
   computed: {
+    // 计算属性会观测内部依赖数据的变化
+    // 如果依赖的数据发生变化，则计算属性会重新执行
     recommendChannels () {
-      const channels = []
-      this.allChannels.forEach((channel) => {
-        // find 遍历数组，找到满足条件的元素项
-        const ret = this.myChannels.find((myChannel) => {
+      // console.log(123)
+      // 数组的filter 方法：遍历数组，把复合条件的元素储存到新数组中
+      return this.allChannels.filter((channel) => {
+        // 数组的find 方法 ：遍历数组，把符合条件的第一个元素返回
+        return !this.myChannels.find((myChannel) => {
           return myChannel.id === channel.id
         })
-
-        // 如果我的频道中不包含该频道，则收集到推荐频道中
-        if (!ret) {
-          channels.push(channel)
-        }
+        // return channels
       })
-      // 把计算结果返回
-      return channels
     }
+    // recommendChannels () {
+    //   const channels = []
+    //   this.allChannels.forEach((channel) => {
+    //     // find 遍历数组，找到满足条件的元素项
+    //     const ret = this.myChannels.find((myChannel) => {
+    //       return myChannel.id === channel.id
+    //     })
+
+    //     // 如果我的频道中不包含该频道，则收集到推荐频道中
+    //     if (!ret) {
+    //       channels.push(channel)
+    //     }
+    //   })
+    //   // 把计算结果返回
+    //   return channels
+    // }
   },
   created () {
     this.loadAllChannels()
@@ -133,6 +162,9 @@ export default {
       }
       .van-grid-item__text {
         margin-bottom: 12px;
+      }
+      .van-grid-item__icon-wrapper {
+        position: unset;
       }
     }
   }

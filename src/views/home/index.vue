@@ -2,24 +2,13 @@
   <div class="home-container">
     <!-- 标题搜索框 -->
     <van-nav-bar class="page-nav-bar" fixed>
-      <van-button
-      class="search-btn"
-      slot="title"
-      type="info"
-      size="small"
-      round
-      icon="search"
-      >搜索</van-button>
-  </van-nav-bar>
+      <van-button class="search-btn" slot="title" type="info" size="small" round icon="search">搜索</van-button>
+    </van-nav-bar>
 
     <!-- 头部导航栏/频道列表 -->
     <van-tabs class="channle-tabs" v-model="active" animated swipeable>
-      <van-tab
-      v-for="channel in channels"
-      :key="channel.id"
-      :title="channel.name"
-      >
-      <article-list :channel="channel"/>
+      <van-tab v-for="channel in channels" :key="channel.id" :title="channel.name">
+        <article-list :channel="channel" />
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn" @click="isChennelEditShow = true">
@@ -28,17 +17,8 @@
     </van-tabs>
 
     <!-- 频道编辑弹出层 -->
-    <van-popup
-      v-model="isChennelEditShow"
-      closeable
-      close-icon-position="top-left"
-      position="bottom"
-      :style="{ height: '100%' }"
-    >
-    <channel-edit
-    :my-channels="channels"
-    :active="active"
-     />
+    <van-popup v-model="isChennelEditShow" closeable close-icon-position="top-left" position="bottom" :style="{ height: '100%' }">
+      <channel-edit :my-channels="channels" :active="active" @update-active="onUpdateActive" />
     </van-popup>
   </div>
 </template>
@@ -70,31 +50,37 @@ export default {
       } catch (err) {
         this.$toast('获取频道数据失败')
       }
+    },
+
+    onUpdateActive (index) {
+      // 更新激活的频道项目
+      console.log('home', index)
+      this.active = index
+      // 关闭频道编辑弹层
+      this.isChennelEditShow = false
     }
   },
   created () {
     this.loadchannels()
   }
-
 }
 </script>
 
 <style lang="less" scope>
-.home-container{
+.home-container {
   padding-top: 174px;
   padding-bottom: 100px;
   .van-tabs {
     position: fixed;
-    top:92px;
+    top: 92px;
     z-index: 1;
     left: 0;
     right: 0;
-
   }
-  .van-nav-bar__title{
+  .van-nav-bar__title {
     max-width: 100%;
   }
-  .search-btn{
+  .search-btn {
     width: 555px;
     height: 64px;
     background-color: #5babfb;
@@ -104,32 +90,32 @@ export default {
       font-size: 32px;
     }
   }
-  .channle-tabs{
-    .van-tabs__wrap{
+  .channle-tabs {
+    .van-tabs__wrap {
       height: 82px;
     }
-    .van-tab{
+    .van-tab {
       min-width: 200px;
-      border-right:1px solid #edeff3;
+      border-right: 1px solid #edeff3;
       font-size: 30px;
       color: #777;
     }
-    .van-tab--active{
+    .van-tab--active {
       color: #333;
     }
-    .van-tabs__line{
+    .van-tabs__line {
       // bottom: 8px
       width: 31px;
       height: 6px;
       margin-bottom: 8px;
       background-color: #3296fa;
     }
-    .placeholder{
+    .placeholder {
       flex-shrink: 0; //不参与flex空间运算
       width: 66px;
       height: 82px;
     }
-    .hamburger-btn{
+    .hamburger-btn {
       position: fixed;
       right: 0;
       display: flex;
@@ -139,12 +125,12 @@ export default {
       height: 82px;
       opacity: 0.9;
       background-color: #fff;
-      i.toutiao{
+      i.toutiao {
         font-size: 33px;
         // color: #333;
-        }
-      &:before{
-        content: "";
+      }
+      &:before {
+        content: '';
         position: absolute;
         left: 0;
         width: 1px;
