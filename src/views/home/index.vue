@@ -27,6 +27,8 @@
 import { getUserChannels } from '@/api/user.js'
 import ArticleList from '@/views/home/components/article-list.vue'
 import ChannelEdit from '@/views/home/components/channel-edit.vue'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage.js'
 export default {
   name: 'HomeIndex',
   data () {
@@ -43,10 +45,27 @@ export default {
   methods: {
     async loadchannels () {
       try {
-        const { data } = await getUserChannels()
-        this.channels = data.data.channels
-        // console.log(data)
-        // console.log(data)
+        // const { data } = await getUserChannels()
+        // this.channels = data.data.channels
+        let channels = []
+        if (this.user) {
+          const { data } = await getUserChannels()
+          channels = data.data.channels
+        } else {
+        // 未登录,判断是否有本地的频道数据列表
+          const localChannels = getItem('TOUTIAO_CHANNELS')
+          if (localChannels) {
+            //  有,拿来使用
+            channels = localChannels
+          } else {
+            //  没有,请求获取默认频道列表
+            const { data } = await getUserChannels()
+            channels = data.data.channels
+          }
+        }
+
+        this.channels = channels
+        // 已登录,请求获取用户频道列表
       } catch (err) {
         this.$toast('获取频道数据失败')
       }
@@ -62,6 +81,9 @@ export default {
   },
   created () {
     this.loadchannels()
+  },
+  computed: {
+    ...mapState(['user'])
   }
 }
 </script>
