@@ -2,7 +2,7 @@
   <div class="home-container">
     <!-- 标题搜索框 -->
     <van-nav-bar class="page-nav-bar" fixed>
-      <van-button class="search-btn" slot="title" type="info" size="small" round icon="search">搜索</van-button>
+      <van-button class="search-btn" slot="title" type="info" size="small" round icon="search" to="/search">搜索</van-button>
     </van-nav-bar>
 
     <!-- 头部导航栏/频道列表 -->
@@ -52,7 +52,7 @@ export default {
           const { data } = await getUserChannels()
           channels = data.data.channels
         } else {
-        // 未登录,判断是否有本地的频道数据列表
+          // 未登录,判断是否有本地的频道数据列表
           const localChannels = getItem('TOUTIAO_CHANNELS')
           if (localChannels) {
             //  有,拿来使用
