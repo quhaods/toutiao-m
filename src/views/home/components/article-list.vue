@@ -20,25 +20,9 @@
         + 在每次请求完毕后，需要手动将 loading 设置为 false，表示本次加载结束
         + 所有数据加载结束，finished 为 true，此时不会触发 load 事件
      -->
-    <van-pull-refresh
-      v-model="isreFreshLoading"
-      :success-text="refreshSuccessText"
-      :success-duration="1500"
-      @refresh="onRefresh"
-    >
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        :error.sync="error"
-        error-text="请求失败，点击重新加载"
-        @load="onLoad"
-      >
-        <article-item
-          v-for="(article, index) in list"
-          :key="index"
-          :article="article"
-        />
+    <van-pull-refresh v-model="isreFreshLoading" :success-text="refreshSuccessText" :success-duration="1500" @refresh="onRefresh">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
+        <article-item v-for="(article, index) in list" :key="index" :article="article" />
         <!-- <van-cell
           v-for="(article, index) in list"
           :key="index"
@@ -91,9 +75,10 @@ export default {
           // 如果请求第1页数据：当前最新时间戳 Date.now
           // 如果请求之后的数据，使用本次接口返回的数据中的 pre_timestamp
           timestamp: this.timestamp || Date.now(), // 时间戳，请求新的推荐数据传当前的时间戳，请求历史推荐传指定的时间戳
-          with_top: 1 // 是否包含置顶，进入页面第一次请求时要包含置顶文章，1-包含置顶，0-不包含
+          with_top: 1
+          // 是否包含置顶，进入页面第一次请求时要包含置顶文章，1-包含置顶，0-不包含
         })
-
+        // console.log(data)
         // 模拟随机失败的情况
         // if (Math.random() > 0.5) {
         //   JSON.parse('dsnajndjsa')
