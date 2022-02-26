@@ -26,3 +26,13 @@ export const getSearchResult = (params) => {
     params
   })
 }
+
+/*
+获取用户搜索记录
+*/
+export const getUserSearchHistories = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/search/histories'
+  })
+}
