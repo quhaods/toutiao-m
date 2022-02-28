@@ -13,7 +13,8 @@ import { updateUserProfile } from '../../../api/user'
 export default {
   name: 'UpdateName',
   props: {
-    name: {
+    // 声明接收父组件v-model 传递的 value 数据
+    value: {
       type: String,
       required: true
     }
@@ -31,7 +32,8 @@ export default {
         })
         this.$toast.success('保存成功')
         // 更新成功-> 修改父组件的name -> 关闭弹出层
-        this.$emit('update-name', this.localName)
+        // 发布input 事件，更新父组件 v-model绑定的数据
+        this.$emit('input', this.localName)
         this.$emit('close')
       } catch (err) {
         if (err && err.response && err.response.status === 409) {
@@ -42,7 +44,7 @@ export default {
   },
   data () {
     return {
-      localName: this.name
+      localName: this.value
     }
   }
 }
