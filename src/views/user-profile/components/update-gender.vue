@@ -22,6 +22,9 @@ export default {
   },
   methods: {
     onGenderChange (picker, value, index) {
+      console.log(picker)
+      console.log(value)
+      console.log(index)
       this.defaultIndex = index
     },
     async onConfirm () {

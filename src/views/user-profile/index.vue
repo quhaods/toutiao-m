@@ -10,7 +10,7 @@
     </van-cell>
     <van-cell title="昵称" is-link :value="user.name" @click="isEditNameShow = true" />
     <van-cell title="性别" is-link :value="user.gender === 0 ? '男':'女'" @click="isEditGenderShow = true" />
-    <van-cell title="生日" is-link :value="user.birthday" />
+    <van-cell title="生日" is-link :value="user.birthday" @click="isBirthdayShow=true" />
 
     <!-- 修改用户名 -->
     <van-popup v-model="isEditNameShow" position="bottom" :style="{ height: '100%' }">
@@ -44,6 +44,12 @@
       <update-gender v-model="user.gender" @close="isEditGenderShow= false"></update-gender>
     </van-popup>
     <!-- /修改用户性别 -->
+
+    <!-- 修改生日 -->
+    <van-popup v-model="isBirthdayShow" position="bottom">
+      <update-birthday v-if="isBirthdayShow" v-model="user.birthday" @close="isBirthdayShow= false"></update-birthday>
+    </van-popup>
+    <!-- /修改生日 -->
   </div>
 </template>
 
@@ -51,17 +57,20 @@
 import { getUserProfile } from '@/api/user.js'
 import UpdateName from '../user-profile/components/update-name.vue'
 import UpdateGender from '../user-profile/components/update-gender.vue'
+import UpdateBirthday from '../user-profile/components/update-birthday.vue'
 export default {
   name: 'UserProfile',
   components: {
     UpdateName,
-    UpdateGender
+    UpdateGender,
+    UpdateBirthday
   },
   data () {
     return {
       user: {}, // 用户数据
       isEditNameShow: false, // 编辑用户昵称
-      isEditGenderShow: false // 编辑用户性别
+      isEditGenderShow: false, // 编辑用户性别
+      isBirthdayShow: false // 编辑用户生日
     }
   },
   created () {
