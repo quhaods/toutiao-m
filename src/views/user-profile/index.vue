@@ -14,11 +14,11 @@
     <van-cell title="性别" is-link :value="user.gender === 0 ? '男':'女'" @click="isEditGenderShow = true" />
     <van-cell title="生日" is-link :value="user.birthday" @click="isBirthdayShow=true" />
 
-    <!-- 修改用户图片 -->
-    <van-popup v-model="isEditPhotoShow" position="bottom" :style="{ height: '100%' }">
-      <update-photo :file="previewImage" @close="isEditPhotoShow=false" @update-photo="user.photo = $event"></update-photo>
+    <!-- 修改用户头像 -->
+    <van-popup class="update-photo-popup" v-model="isEditPhotoShow" position="bottom" :style="{ height: '100%' }">
+      <update-photo v-if="isEditPhotoShow" :file="previewImage" @close="isEditPhotoShow=false" @update-photo="user.photo = $event"></update-photo>
     </van-popup>
-    <!-- /修改用户图片 -->
+    <!-- /修改用户头像 -->
 
     <!-- 修改用户名 -->
     <van-popup v-model="isEditNameShow" position="bottom" :style="{ height: '100%' }">
@@ -127,5 +127,8 @@ export default {
 }
 .van-popup {
   background-color: #f5f7f9;
+}
+.update-photo-popup {
+  background-color: #000;
 }
 </style>
