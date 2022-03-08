@@ -37,6 +37,29 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
+
+// 建立链接
+const socket = io('http://ttapi.research.itcast.cn/app/socket.io/')
+
+// 链接建立成功了
+socket.on('connect', function () {
+  console.log('链接建立成功了')
+})
+
+// 触发了某个事件
+// socket.on('event', function (data) {
+//   console.log('触发了某个事件')
+// })
+
+socket.on('disconnect', function () {
+  console.log('断开链接了')
+})
+
+// 发送消息
+// socket.emit('消息类型',消息内容)
+// 接收消息
+// socket.on('消息类型',function(data){data消息})
 export default {
   name: 'UserChat',
   data () {
